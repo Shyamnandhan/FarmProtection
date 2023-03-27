@@ -1,0 +1,161 @@
+# to ignore the warnings 
+import warnings
+warnings.filterwarnings("ignore")
+
+#to mount the YOUR DRIVE to access stored datasets
+from google.colab import drive
+drive.mount('/content/drive')
+
+# unzip your zipped datas
+!unzip '/content/drive/MyDrive/content/Animal_Classifications.zip'
+
+#install the requied packages
+import pandas as pd
+import numpy as np
+import os
+import shutil
+import glob
+import matplotlib.pyplot as plt 
+
+#set the Path for training and testing
+train_path  = "/content/Animal_Classifications/train"
+test_path   = "/content/Animal_Classifications/test"
+print("splited")
+
+#install the Required Packages for Image Processing 
+from keras.preprocessing.image import ImageDataGenerator
+from keras.applications import vgg16
+from keras.models import Model
+from keras.layers import Dense, MaxPool2D, Conv2D
+import keras
+
+train_data_gen = ImageDataGenerator(preprocessing_function= vgg16.preprocess_input , zoom_range= 0.2, horizontal_flip= True, shear_range= 0.2 , rescale= 1./255)
+train = train_data_gen.flow_from_directory(directory= train_path , target_size=(224,224))
+
+test_data_gen = ImageDataGenerator(preprocessing_function= vgg16.preprocess_input, rescale= 1./255 )
+test = train_data_gen.flow_from_directory(directory= test_path , target_size=(224,224), shuffle= False)
+
+train.class_indices
+
+#Assign the class type
+class_type = {0:'Bear',
+ 1:'Bull',
+ 2:'Cattle',
+ 3:'Cheetah',
+ 4:'Deer',
+ 5:'Elephant',
+ 6:'Fox',
+ 7:'Goat',
+ 8:'Horse',
+ 9:'Lion',
+ 10:'Pig',
+ 11:'Sheep',
+ 12:'Tiger' }
+
+t_img , label = train.next()
+
+#Plot the Imagges for grayscale visualization
+def plotImages(img_arr, label):
+
+  for im, l in zip(img_arr,label) :
+    plt.figure(figsize= (5,5))
+    plt.imshow(im, cmap = 'gray')
+    plt.title(im.shape)
+    plt.axis = False
+    plt.show()
+    
+plotImages(t_img, label)
+
+from keras.applications.vgg16 import VGG16
+from keras.layers import Flatten , Dense, Dropout , MaxPool2D
+
+from keras.applications.vgg16 import VGG16
+from keras.layers import Flatten , Dense, Dropout , MaxPool2D
+
+#import predefined Weights file for Transfer Learning
+vgg = VGG16( input_shape=(224,224,3), include_top= False) # include_top will consider the new weights
+
+for layer in vgg.layers:           # Dont Train the parameters again 
+  layer.trainable = False
+  
+x = Flatten()(vgg.output)
+x = Dense(units=13, activation='softmax', name = 'predictions')(x)
+
+model = Model(vgg.input, x)
+
+model.summary()
+
+model.compile(optimizer='adam', loss = 'categorical_crossentropy', metrics=['accuracy'])
+
+# implementing early stopping and model check point 
+
+from keras.callbacks import EarlyStopping
+from keras.callbacks import ModelCheckpoint
+
+es = EarlyStopping(monitor= "val_accuracy" , min_delta= 0.01, patience= 3, verbose=1)
+mc = ModelCheckpoint(filepath="bestmodel.h5", monitor="val_accuracy", verbose=1, save_best_only= False)
+
+# Training your model
+#hist = model.fit_generator(train, steps_per_epoch= 10, epochs= 8, validation_data= valid , validation_steps= 32)
+hist = model.fit_generator(train, steps_per_epoch= 10, epochs=50 , validation_data= test , validation_steps= 32, callbacks=[mc])
+
+## load only the best model 
+from keras.models import load_model
+model = load_model("bestmodel.h5")
+
+h = hist.history
+h.keys()
+
+plt.plot(h['accuracy'])
+plt.plot(h['val_accuracy'] , c = "red")
+plt.title("acc vs v-acc")
+plt.show()
+
+plt.plot(h['loss'])
+plt.plot(h['val_loss'] , c = "red")
+plt.title("loss vs v-loss")
+plt.show()
+
+# checking out the accuracy of our model 
+
+acc = model.evaluate_generator(generator= test)[1] 
+
+
+from keras.preprocessing import image
+
+def get_img_array(img_path):
+  """
+  Input : Takes in image path as input 
+  Output : Gives out Pre-Processed image
+  """
+  path = img_path
+
+  img = keras.utils.load_img(path, target_size=(224,224,3))
+
+  img = keras.utils.img_to_array(img)/255
+  img = np.expand_dims(img , axis= 0 )
+  
+  return img
+  
+  import numpy as np
+from IPython.display import Audio
+from scipy.io import wavfile
+
+path = "/content/drive/MyDrive/content/Lion_waiting_in_Namibia.jpg"       # you can add any image path
+
+#predictions: path:- provide any image from google or provide image from all image folder
+img = get_img_array(path)
+
+res = class_type[np.argmax(model.predict(img))]
+print(f"The given  image is of type = {res}")
+print()
+
+# to display the image  
+plt.imshow(img[0], cmap = "gray")
+plt.title("input image")
+plt.show()
+
+#data = wavfile.read('/content/drive/MyDrive/content/angry-beast-6172.wav')
+#framerate = data[0]
+#sampledata = data[1]
+#Audio(sampledata,rate=framerate, autoplay=True)
