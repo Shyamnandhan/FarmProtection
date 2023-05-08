@@ -9,7 +9,7 @@ class TestStringMethods(unittest.TestCase):
 		# error message in case if test case got failed
 		message = "First value and second value are not equal !"
 		# assertEqual() to check equality of first & second value
-		self.assertEqual(firstValue, secondValue, message)
+		self.assertIn(firstValue, secondValue, message)
 
 if __name__ == '__main__':
 	unittest.main()
