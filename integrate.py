@@ -65,7 +65,7 @@ while True:
     cv2.imshow('predictions', frame)
     cv2.putText(frame, f'Prediction: {res2}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     pygame.mixer.init()
-    if res2 == "monkey":
+    if res2 == "Bird":
         GPIO.output(12,False)
         a=0
         data = {'animal':a}
@@ -76,102 +76,31 @@ while True:
         #while pygame.mixer.music.get_busy() == True:
         #    continue
 
-    elif res2 == "Lion":
+    elif res2 == "Elephant":
+        GPIO.output(12,False)
         a=1
         data = {'animal':a}
         db.child("Status").push(data)
         db.update(data)
-        pygame.mixer.music.load("/home/admin/project/57GY2SQ-elephant-trumpeting.wav")
+        pygame.mixer.music.load("/home/admin/project/SJRDHEP-firecrackers-burst.wav")
         pygame.mixer.music.play()
         #while pygame.mixer.music.get_busy() == True:
         #    continue
-        
-        GPIO.output(12,True)
-        time.sleep(2)
-        GPIO.output(12,False)
 
-    elif res2 == "Cheetah":
+    elif res2 == "Sheep":
         GPIO.output(12,False)
         a=2
         data = {'animal':a}
         db.child("Status").push(data)
         db.update(data)
-        pygame.mixer.music.load("/home/admin/project/2PH73TE-hyena-barks-and-moans.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue    
-
-    elif res2 == "Elephant":
-        GPIO.output(12,False)
-        a=3
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
-        pygame.mixer.music.load("/home/admin/project/SJRDHEP-firecrackers-burst.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue
-
-    
-
-    elif res2 == "DOG":
-        GPIO.output(12,False)
-        a=4
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
-        pygame.mixer.music.load("/home/admin/project/SJRDHEP-firecrackers-burst.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue 
-    
-    elif res2 == "Goat":
-        GPIO.output(12,False)
-        a=5
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
         pygame.mixer.music.load("/home/admin/project/SJRDHEP-firecrackers-burst.wav")
         pygame.mixer.music.play()
         #while pygame.mixer.music.get_busy() == True:
         #    continue 
 
-    elif res2 == "Pig":
-        GPIO.output(12,False)
-        a=6
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
-        pygame.mixer.music.load("/home/admin/project/PEKJMAR-gorilla-hooting.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue
-
-    elif res2 == "Deer":
-        GPIO.output(12,False)
-        a=7
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
-        pygame.mixer.music.load("/home/admin/Downloads/angry-beast-6172.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue
-
-    elif res2 == "Tiger":
-        GPIO.output(12,False)
-        a=8
-        data = {'animal':a}
-        db.child("Status").push(data)
-        db.update(data)
-        pygame.mixer.music.load("/home/admin/project/57GY2SQ-elephant-trumpeting.wav")
-        pygame.mixer.music.play()
-        #while pygame.mixer.music.get_busy() == True:
-        #    continue
-    
     elif res2 == "Bear":
         GPIO.output(12,False)
-        a=9
+        a=3
         data = {'animal':a}
         db.child("Status").push(data)
         db.update(data)
@@ -179,10 +108,10 @@ while True:
         pygame.mixer.music.play()
         #while pygame.mixer.music.get_busy() == True:
         #    continue 
+    
     else:
-        GPIO.output(12,False)
-        
-        a=10
+        GPIO.output(12,False)    
+        a=4
         data = {'animal':a}
         db.child("Status").push(data)
         db.update(data)
