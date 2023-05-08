@@ -1,0 +1,6 @@
+opencv-python-headless
+mediapipe
+keras
+pytest
+pyautogui
+comtypes
