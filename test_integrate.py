@@ -2,7 +2,7 @@
 import unittest
 
 class animal:
-x = 'Lion'
+	x = 'Lion'
 
 class TestMethods(unittest.TestCase):
 	# test function to test object equality of two valu
