@@ -5,7 +5,7 @@ class animal:
 x = 'Lion'
 
 class TestMethods(unittest.TestCase):
-	# test function to test object equality of two value
+	# test function to test object equality of two valu
 	def test_positive(self):
 		firstValue = animal()
 		secondValue = 'Lion'
