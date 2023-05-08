@@ -1,5 +1,6 @@
 # unit test case
 import unittest
+
 class TestStringMethods(unittest.TestCase):
 	# test function to test equality of two value
 	def test_negative(self):
